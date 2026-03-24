@@ -9,14 +9,19 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
+
+        {/* FIRST PAGE */}
         <Route path="/" element={<Register />} />
 
         {/* Auth pages */}
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
-        <Route path="/" element={<Dashboard />} />
+
+        {/* Main pages */}
+        <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/clients" element={<Clients />} />
         <Route path="/projects" element={<Projects />} />
+
       </Routes>
     </BrowserRouter>
   );
