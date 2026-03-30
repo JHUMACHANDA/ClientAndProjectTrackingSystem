@@ -39,7 +39,7 @@ const Login = () => {
 
       <form
         onSubmit={handleLogin}
-        className="bg-white p-8 rounded-xl shadow-lg w-96"
+        className="bg-white/70 p-8 rounded-xl shadow-lg w-96"
       >
         <h2 className="text-2xl font-bold mb-6 text-center">Login</h2>
 
@@ -66,7 +66,7 @@ const Login = () => {
         {/* Register link */}
         <p className="text-center mt-4 text-sm">
           Don't have an account?{" "}
-          <Link to="/register" className="text-green-500 font-semibold">
+          <Link to="/register" className="text-green-700 font-semibold">
             Register here
           </Link>
         </p>
