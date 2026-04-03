@@ -1,4 +1,6 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+
+import Home from "./pages/Home";   // ✅ NEW
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Dashboard from "./pages/Dashboard";
@@ -10,8 +12,8 @@ function App() {
     <BrowserRouter>
       <Routes>
 
-        {/* FIRST PAGE */}
-        <Route path="/" element={<Register />} />
+        {/* FIRST PAGE (Home) */}
+        <Route path="/" element={<Home />} />
 
         {/* Auth pages */}
         <Route path="/login" element={<Login />} />
