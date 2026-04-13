@@ -37,10 +37,10 @@ const Login = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-300 via-blue-400 to-blue-600 flex items-center justify-center p-6">
 
-      
+
       <div className="w-full max-w-6xl bg-white rounded-3xl shadow-2xl overflow-hidden">
 
-        
+
         <div className="flex justify-between items-center px-10 py-5">
           <h1 className="text-gray-700 font-semibold text-lg">LOGO</h1>
 
@@ -55,7 +55,7 @@ const Login = () => {
           </div>
         </div>
 
-        
+
         <div className="flex items-center px-12 pb-12">
 
           {/* LEFT SIDE */}
@@ -73,7 +73,7 @@ const Login = () => {
 
             {loading && <Loader />}
 
-            
+
             <form
               onSubmit={handleLogin}
               className="space-y-4 w-full max-w-xs mx-auto"
@@ -93,7 +93,7 @@ const Login = () => {
                 onChange={(e) => setPassword(e.target.value)}
               />
 
-              
+
               <button className="w-full bg-blue-500 text-white py-1.5 text-sm rounded-md hover:bg-blue-600 transition">
                 LOGIN
               </button>
