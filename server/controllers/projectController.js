@@ -1,7 +1,7 @@
 // controllers/projectController.js
 import Project from "../Models/Project.js";
 
-// GET — শুধু এই user এর projects
+
 export const getProjects = async (req, res) => {
   try {
     const projects = await Project.find({ user: req.user.id }).sort({ createdAt: -1 });
@@ -11,7 +11,7 @@ export const getProjects = async (req, res) => {
   }
 };
 
-// POST — নতুন project save করো
+
 export const createProject = async (req, res) => {
   try {
     const { name, clientName, deadline, status } = req.body;

@@ -20,10 +20,10 @@ const Login = () => {
       const res = await axios.post("https://clientandprojecttrackingsystem.onrender.com/api/auth/login", { username, password });
       
       if (res.data.success) {
-        // এই লাইনটিই মিসিং ছিল। টোকেন সেভ করা হচ্ছে।
+        
         localStorage.setItem("token", res.data.token); 
         
-        // টোকেন সেভ হওয়ার পর ড্যাশবোর্ডে পাঠাবে
+        
         navigate("/dashboard");
       } else {
         alert("Invalid credentials");

@@ -23,10 +23,10 @@ const Dashboard = () => {
       headers: { Authorization: `Bearer ${token}` }
     });
     
-    console.log("Dashboard Data:", res.data); // এটি চেক করুন ব্রাউজার কনসোলে
+    console.log("Dashboard Data:", res.data); 
     const data = res.data;
     setStats(res.data.stats);
-    setClients(res.data.clients || []); // যদি না থাকে তবে খালি অ্যারে দিন
+    setClients(res.data.clients || []); 
     setProjects(res.data.projects || []);
   } catch (err) {
     console.error("Error fetching data:", err);

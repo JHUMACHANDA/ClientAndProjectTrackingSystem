@@ -12,7 +12,7 @@ const Clients = () => {
   const [search, setSearch] = useState("");
   const [deleteConfirm, setDeleteConfirm] = useState(null);
 
-  // ১. টোকেন সহ হেডার কনফিগ তৈরি করার ফাংশন
+  
   const getAuthHeader = () => {
     const token = localStorage.getItem("token");
     if (!token) return null;
@@ -27,10 +27,10 @@ const Clients = () => {
     fetchClients();
   }, []);
 
-  // ২. ক্লায়েন্ট লিস্ট নিয়ে আসা
+  
   const fetchClients = async () => {
     const config = getAuthHeader();
-    if (!config) return navigate("/login"); // টোকেন না থাকলে লগইনে পাঠাবে
+    if (!config) return navigate("/login"); 
 
     try {
       const res = await axios.get("https://clientandprojecttrackingsystem.onrender.com/api/clients", config);
@@ -41,7 +41,7 @@ const Clients = () => {
     }
   };
 
-  // ৩. ক্লায়েন্ট তৈরি বা আপডেট করা
+  
   const handleSubmit = async (e) => {
     e.preventDefault();
     const config = getAuthHeader();
@@ -51,17 +51,17 @@ const Clients = () => {
 
     try {
       if (editId) {
-        // আপডেট (PUT)
+        
         await axios.put(`https://clientandprojecttrackingsystem.onrender.com/api/clients/${editId}`, clientData, config);
         setEditId(null);
       } else {
-        // তৈরি (POST)
+        
         await axios.post("https://clientandprojecttrackingsystem.onrender.com/api/clients", clientData, config);
       }
       
       setName("");
       setEmail("");
-      fetchClients(); // ডাটাবেস থেকে ফ্রেশ লিস্ট আনা
+      fetchClients(); 
       alert(editId ? "Client updated!" : "Client added successfully!");
     } catch (err) {
       console.error("Save Error:", err.response?.data);
@@ -69,7 +69,7 @@ const Clients = () => {
     }
   };
 
-  // ৪. ক্লায়েন্ট ডিলিট করা
+  
   const handleDelete = async (id) => {
     try {
       await axios.delete(`https://clientandprojecttrackingsystem.onrender.com/api/clients/${id}`, getAuthHeader());

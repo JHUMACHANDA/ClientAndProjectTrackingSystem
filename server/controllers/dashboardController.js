@@ -3,10 +3,10 @@ import Project from "../Models/Project.js";
 
 export const getDashboardStats = async (req, res) => {
     try {
-        // protect middleware থেকে আসা ইউজার আইডি
+        
         const userId = req.user.id; 
 
-        // userId অনুযায়ী ফিল্টার করুন
+        
         const clients = await Client.find({ user: userId }); 
         const projects = await Project.find({ user: userId });
 

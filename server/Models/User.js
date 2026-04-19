@@ -8,7 +8,7 @@ const userSchema = new mongoose.Schema({
     password: { type: String, required: true },
 }, { timestamps: true });
 
-// পাসওয়ার্ড সেভ করার আগে অটোমেটিক হ্যাশ হবে
+
 userSchema.pre("save", async function (next) {
     if (!this.isModified("password")) return next();
     try {
@@ -20,7 +20,7 @@ userSchema.pre("save", async function (next) {
     }
 });
 
-// পাসওয়ার্ড চেক করার জন্য মেথড
+
 userSchema.methods.comparePassword = async function (candidatePassword) {
     return await bcrypt.compare(candidatePassword, this.password);
 };

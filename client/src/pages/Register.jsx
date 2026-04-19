@@ -20,7 +20,7 @@ const Register = () => {
     setTimeout(() => setMounted(true), 60);
   }, []);
 
-  // ── সঠীক হ্যান্ডেল রেজিস্টার ফাংশন ──────────────────────────────
+  
   const handleRegister = async (e) => {
     e.preventDefault();
     if (!agreed) {
@@ -238,7 +238,7 @@ const Register = () => {
             TrackProject gives your team one place to plan, assign tasks, track progress, and hit deadlines — all in one clean workspace.
           </p>
 
-          {/* Real feature cards — what the app actually does */}
+          {/* Real feature cards */}
           {[
             {
               icon: "📋",

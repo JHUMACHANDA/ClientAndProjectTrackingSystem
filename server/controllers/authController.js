@@ -1,7 +1,7 @@
 import User from "../Models/User.js";
 import generateToken from "../utils/generateToken.js";
 
-// ── REGISTER (ইউজার রেজিস্ট্রেশন) ──────────────────────────────
+
 export const register = async (req, res) => {
     try {
         const { fullName, username, email, password } = req.body;
@@ -50,7 +50,7 @@ export const register = async (req, res) => {
     }
 };
 
-// ── LOGIN (ইউজার লগইন) ─────────────────────────────────────────
+
 export const login = async (req, res) => {
     try {
         const { username, password } = req.body;

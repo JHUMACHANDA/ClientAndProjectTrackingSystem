@@ -1,15 +1,15 @@
 import Client from "../Models/Client.js";
 
-// ১. ক্লায়েন্ট তৈরি করা (Create)
+
 export const createClient = async (req, res) => {
   try {
     const { name, email } = req.body;
     
-    // নতুন ক্লায়েন্ট অবজেক্ট তৈরি
+    
     const newClient = new Client({
       name,
       email,
-      user: req.user._id // মিডলওয়্যার থেকে আসা ইউজার আইডি
+      user: req.user._id 
     });
 
     const savedClient = await newClient.save();
@@ -19,7 +19,7 @@ export const createClient = async (req, res) => {
   }
 };
 
-// ২. ক্লায়েন্ট লিস্ট দেখা (Get - শুধুমাত্র নিজের ক্লায়েন্টরা আসবে)
+
 export const getClients = async (req, res) => {
   try {
     const clients = await Client.find({ user: req.user._id });
@@ -28,12 +28,12 @@ export const getClients = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
-// ৩. ক্লায়েন্ট আপডেট (নিরাপত্তার জন্য ইউজার চেক যোগ করা হয়েছে)
+
 export const updateClient = async (req, res) => {
     const { id } = req.params;
     const { name, email } = req.body;
     try {
-        // নিশ্চিত করুন ইউজার শুধু তার নিজের ক্লায়েন্ট আপডেট করছে
+        
         const updatedClient = await Client.findOneAndUpdate(
             { _id: id, user: req.user.id }, 
             { name, email }, 
@@ -48,7 +48,7 @@ export const updateClient = async (req, res) => {
     }
 };
 
-// ৪. ক্লায়েন্ট ডিলিট (নিরাপত্তার জন্য ইউজার চেক যোগ করা হয়েছে)
+
 export const deleteClient = async (req, res) => {
     const { id } = req.params;
     try {
