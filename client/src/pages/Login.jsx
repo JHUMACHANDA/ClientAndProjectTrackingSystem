@@ -13,17 +13,27 @@ const Login = () => {
 
   useEffect(() => { setTimeout(() => setMounted(true), 60); }, []);
 
-  const handleLogin = async (e) => {
+ const handleLogin = async (e) => {
     e.preventDefault();
     setLoading(true);
     try {
-      const res = await axios.post("http://localhost:5000/api/auth/login", { username, password });
-      if (res.data.success) navigate("/dashboard");
-      else alert("Invalid credentials");
-    } catch { alert("Login failed"); }
+      const res = await axios.post("http://localhost:5001/api/auth/login", { username, password });
+      
+      if (res.data.success) {
+        // এই লাইনটিই মিসিং ছিল। টোকেন সেভ করা হচ্ছে।
+        localStorage.setItem("token", res.data.token); 
+        
+        // টোকেন সেভ হওয়ার পর ড্যাশবোর্ডে পাঠাবে
+        navigate("/dashboard");
+      } else {
+        alert("Invalid credentials");
+      }
+    } catch (err) { 
+      console.error("Login error:", err.response?.data);
+      alert(err.response?.data?.message || "Login failed"); 
+    }
     setLoading(false);
   };
-
   return (
     <div style={{ minHeight: "100vh", display: "flex", fontFamily: "'Inter', system-ui, sans-serif" }}>
       <style>{`

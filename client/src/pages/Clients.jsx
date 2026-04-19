@@ -12,36 +12,72 @@ const Clients = () => {
   const [search, setSearch] = useState("");
   const [deleteConfirm, setDeleteConfirm] = useState(null);
 
+  // ১. টোকেন সহ হেডার কনফিগ তৈরি করার ফাংশন
+  const getAuthHeader = () => {
+    const token = localStorage.getItem("token");
+    if (!token) return null;
+    return {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    };
+  };
+
   useEffect(() => {
     fetchClients();
   }, []);
 
+  // ২. ক্লায়েন্ট লিস্ট নিয়ে আসা
   const fetchClients = async () => {
-    const res = await axios.get("http://localhost:5000/api/clients");
-    setClients(res.data);
-  };
+    const config = getAuthHeader();
+    if (!config) return navigate("/login"); // টোকেন না থাকলে লগইনে পাঠাবে
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
     try {
-      if (editId) {
-        await axios.put(`http://localhost:5000/api/clients/${editId}`, { name, email });
-        setEditId(null);
-      } else {
-        await axios.post("http://localhost:5000/api/clients", { name, email });
-      }
-      setName("");
-      setEmail("");
-      fetchClients();
+      const res = await axios.get("http://localhost:5001/api/clients", config);
+      setClients(res.data);
     } catch (err) {
-      console.error(err);
+      console.error("Fetch error:", err.response?.data);
+      if (err.response?.status === 401) navigate("/login");
     }
   };
 
+  // ৩. ক্লায়েন্ট তৈরি বা আপডেট করা
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const config = getAuthHeader();
+    if (!config) return alert("Please login first");
+
+    const clientData = { name, email };
+
+    try {
+      if (editId) {
+        // আপডেট (PUT)
+        await axios.put(`http://localhost:5001/api/clients/${editId}`, clientData, config);
+        setEditId(null);
+      } else {
+        // তৈরি (POST)
+        await axios.post("http://localhost:5001/api/clients", clientData, config);
+      }
+      
+      setName("");
+      setEmail("");
+      fetchClients(); // ডাটাবেস থেকে ফ্রেশ লিস্ট আনা
+      alert(editId ? "Client updated!" : "Client added successfully!");
+    } catch (err) {
+      console.error("Save Error:", err.response?.data);
+      alert(err.response?.data?.message || "Failed to save client.");
+    }
+  };
+
+  // ৪. ক্লায়েন্ট ডিলিট করা
   const handleDelete = async (id) => {
-    await axios.delete(`http://localhost:5000/api/clients/${id}`);
-    setDeleteConfirm(null);
-    fetchClients();
+    try {
+      await axios.delete(`http://localhost:5001/api/clients/${id}`, getAuthHeader());
+      setDeleteConfirm(null);
+      fetchClients();
+    } catch (err) {
+      console.error("Delete Error:", err.response?.data);
+    }
   };
 
   const handleEdit = (client) => {

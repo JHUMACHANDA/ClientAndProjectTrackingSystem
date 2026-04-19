@@ -6,7 +6,7 @@ import axios from "axios";
 import { Users, FolderKanban } from "lucide-react";
 
 const Dashboard = () => {
-  const [stats, setStats] = useState({ clients: 0, active: 0, completed: 0 });
+  const [stats, setStats] = useState({ clients: 0, active: 0, completed: 0, pending: 0 });
   const [clients, setClients] = useState([]);
   const [projects, setProjects] = useState([]);
   const [searchClient, setSearchClient] = useState("");
@@ -17,29 +17,31 @@ const Dashboard = () => {
   }, []);
 
   const fetchDashboard = async () => {
-    try {
-      const token = localStorage.getItem("token");
-      const res = await axios.get("http://localhost:5001/api/dashboard", {
-        headers: { Authorization: `Bearer ${token}` },
-        withCredentials: true,
-      });
-      setStats(res.data.stats);
-      setClients(res.data.clients);
-      setProjects(res.data.projects);
-    } catch (err) {
-      console.error("Error fetching data:", err);
-    }
-  };
+  try {
+    const token = localStorage.getItem("token");
+    const res = await axios.get("http://localhost:5001/api/dashboard", {
+      headers: { Authorization: `Bearer ${token}` }
+    });
+    
+    console.log("Dashboard Data:", res.data); // এটি চেক করুন ব্রাউজার কনসোলে
+    const data = res.data;
+    setStats(res.data.stats);
+    setClients(res.data.clients || []); // যদি না থাকে তবে খালি অ্যারে দিন
+    setProjects(res.data.projects || []);
+  } catch (err) {
+    console.error("Error fetching data:", err);
+  }
+};
 
   const filteredClients = clients.filter((c) =>
     c.name?.toLowerCase().includes(searchClient.toLowerCase())
   );
 
   const filteredProjects = projects.filter((p) =>
-    p.title?.toLowerCase().includes(searchProject.toLowerCase())
+    p.name?.toLowerCase().includes(searchProject.toLowerCase())
   );
 
-  return (
+ return (
     <div
       className="flex min-h-screen font-sans"
       style={{
@@ -215,7 +217,7 @@ const Dashboard = () => {
         <Navbar />
 
         {/* Stats Cards */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mt-8">
           {/* Total Clients */}
           <div className="stat-card" style={{ background: "rgba(59,130,246,0.18)", animationDelay: "0s" }}>
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
@@ -247,7 +249,21 @@ const Dashboard = () => {
               <span style={{ color: "#a5b4fc", fontSize: 11, fontWeight: 700 }}>In progress</span> right now
             </p>
           </div>
-
+ {/* Pending Projects */}
+<div className="stat-card" style={{ background: "rgba(234,179,8,0.15)", animationDelay: "0.3s" }}>
+  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
+    <div>
+      <p style={{ color: "rgba(255,255,255,0.55)", fontSize: 12, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.6px", margin: "0 0 8px" }}>Pending Projects</p>
+      <p style={{ color: "#fff", fontSize: 32, fontWeight: 800, margin: 0, letterSpacing: "-1px" }}>{stats.pending}</p>
+    </div>
+    <div style={{ width: 46, height: 46, borderRadius: 14, background: "rgba(234,179,8,0.25)", border: "1px solid rgba(234,179,8,0.4)", display: "flex", alignItems: "center", justifyContent: "center" }}>
+      <FolderKanban size={22} color="#fde047" />
+    </div>
+  </div>
+  <p style={{ color: "rgba(255,255,255,0.3)", fontSize: 11, margin: "12px 0 0" }}>
+    <span style={{ color: "#fde047", fontSize: 11, fontWeight: 700 }}>Waiting</span> to start
+  </p>
+</div>
           {/* Completed Projects */}
           <div className="stat-card" style={{ background: "rgba(147,197,253,0.12)", animationDelay: "0.2s" }}>
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
@@ -321,15 +337,15 @@ const Dashboard = () => {
               filteredProjects.map((p) => (
                 <div key={p._id} className="dash-row">
                   <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-                    <div style={{ width: 36, height: 36, borderRadius: 10, background: p.status === "active" ? "rgba(99,102,241,0.28)" : "rgba(255,255,255,0.06)", border: `1px solid ${p.status === "active" ? "rgba(99,102,241,0.4)" : "rgba(255,255,255,0.1)"}`, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 16 }}>
-                      {p.status === "active" ? "🚀" : "✅"}
-                    </div>
+                    <div style={{ width: 36, height: 36, borderRadius: 10, background: p.status === "Ongoing" ? "rgba(99,102,241,0.28)" : "rgba(255,255,255,0.06)", border: `1px solid ${p.status === "Ongoing" ? "rgba(99,102,241,0.4)" : "rgba(255,255,255,0.1)"}`, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 16 }}>
+  {p.status === "Ongoing" ? "🚀" : "✅"}
+</div>
                     <div>
-                      <p style={{ fontWeight: 600, color: "#fff", fontSize: 14, margin: 0 }}>{p.title}</p>
-                      <p style={{ fontSize: 11, color: "rgba(255,255,255,0.38)", margin: "2px 0 0", textTransform: "capitalize" }}>{p.status}</p>
+                      <p style={{ fontWeight: 600, color: "#fff", fontSize: 14, margin: 0 }}>{p.name}</p>
+                      <p style={{ fontSize: 11, color: "rgba(255,255,255,0.38)", margin: "2px 0 0", textTransform: "capitalize" }}>{p.clientName} • {p.status}</p>
                     </div>
                   </div>
-                  <span className={p.status === "active" ? "dash-badge-active" : "dash-badge-inactive"}>
+                  <span className={p.status === "Ongoing" ? "dash-badge-active" : "dash-badge-inactive"}>
                     {p.status}
                   </span>
                 </div>

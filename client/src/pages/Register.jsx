@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import Loader from "../components/Loader";
 import axios from "axios";
@@ -17,24 +16,44 @@ const Register = () => {
   const [agreed, setAgreed] = useState(false);
   const navigate = useNavigate();
 
-  useEffect(() => { setTimeout(() => setMounted(true), 60); }, []);
+  useEffect(() => {
+    setTimeout(() => setMounted(true), 60);
+  }, []);
 
+  // ── সঠীক হ্যান্ডেল রেজিস্টার ফাংশন ──────────────────────────────
   const handleRegister = async (e) => {
     e.preventDefault();
-    if (!agreed) { alert("Please agree to terms"); return; }
+    if (!agreed) {
+      alert("Please agree to terms");
+      return;
+    }
     setLoading(true);
     try {
-      await axios.post("http://localhost:5000/api/auth/register", { fullName, username, email, password });
-      navigate("/login");
-    } catch { alert("Registration failed"); }
-    setLoading(false);
+     
+      const response = await axios.post("http://localhost:5001/api/auth/register", {
+        fullName,
+        username,
+        email,
+        password,
+      });
+
+      if (response.data.success) {
+        alert(response.data.message);
+        navigate("/login");
+      }
+    } catch (error) {
+      console.log(error.response?.data);
+      alert(error.response?.data?.message || "Registration failed");
+    } finally {
+      setLoading(false);
+    }
   };
 
   const strength = password.length === 0 ? 0 : password.length < 6 ? 1 : password.length < 10 ? 2 : 3;
   const strengthColor = ["#e5e7eb", "#ef4444", "#f59e0b", "#10b981"][strength];
   const strengthLabel = ["", "Weak", "Fair", "Strong"][strength];
 
-  return (
+ return (
     <div style={{ minHeight: "100vh", display: "flex", fontFamily: "'Inter',system-ui,sans-serif" }}>
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
@@ -262,5 +281,6 @@ const Register = () => {
     </div>
   );
 };
+
 
 export default Register;
