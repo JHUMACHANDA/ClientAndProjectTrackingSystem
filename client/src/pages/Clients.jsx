@@ -81,11 +81,11 @@ const Clients = () => {
   };
 
   const handleEdit = (client) => {
-    setName(client.name);
-    setEmail(client.email);
-    setEditId(client._id);
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  };
+  setName(client.name);
+  setEmail(client.email);
+  setEditId(client._id);
+  document.querySelector(".cli-glass-card").scrollIntoView({ behavior: "smooth" });
+};
 
   const filteredClients = clients.filter(
     (c) =>
